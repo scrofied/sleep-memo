@@ -1,0 +1,1297 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#08061a">
+<meta name="description" content="渐变梦幻风的睡眠备忘录：睡前清空大脑三行、4-7-8 呼吸引导、早上记录入睡耗时。数据只保存在本机浏览器。">
+<title>睡眠备忘录 · 把今天轻轻放下</title>
+<style>
+  :root{
+    color-scheme: dark;
+    --ink:#f3edff;
+    --ink2:rgba(243,237,255,.68);
+    --ink3:rgba(243,237,255,.43);
+    --line:rgba(255,255,255,.12);
+    --line-soft:rgba(255,255,255,.075);
+    --lav:#b79bff;
+    --pink:#ffa9d1;
+    --peach:#ffd9b0;
+    --sky:#8fd6ff;
+    --hand:"Kaiti SC","STKaiti","KaiTi","楷体","LXGW WenKai",serif;
+    --serif:"STZhongsong","华文中宋","Songti SC","Source Han Serif SC","Noto Serif SC",Georgia,serif;
+    --sans:"PingFang SC","HarmonyOS Sans SC","Microsoft YaHei UI","Microsoft YaHei",system-ui,sans-serif;
+    --mono:"JetBrains Mono","Consolas","SFMono-Regular",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  html{background:#05040d;scroll-behavior:smooth}
+  #dump{scroll-margin-top:22px}
+  body{
+    min-height:100vh;
+    background:#05040d;
+    color:var(--ink);
+    font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    overflow-x:hidden;
+  }
+
+  /* ---------- 渐变梦幻夜空 ---------- */
+  .sky{
+    position:fixed; inset:0; z-index:0; overflow:hidden;
+    background:
+      radial-gradient(120% 90% at 50% 110%, #6b3f95 0%, #2b1a55 38%, transparent 72%),
+      radial-gradient(90% 70% at 88% 4%, #1e2a63 0%, transparent 62%),
+      radial-gradient(80% 60% at 4% 16%, #3a1f5e 0%, transparent 66%),
+      linear-gradient(180deg,#05040e 0%,#0a0820 30%,#150e33 62%,#241443 100%);
+  }
+  .moon{
+    position:absolute; right:-40px; top:-62px; width:260px; height:260px; border-radius:50%;
+    background:radial-gradient(circle at 40% 38%, #ffe9c8 0%, #ffdcaa 40%, rgba(255,210,160,.22) 64%, transparent 72%);
+    filter:blur(10px);
+    opacity:.5;
+    mix-blend-mode:screen;
+  }
+  .aurora{
+    position:absolute; border-radius:50%; filter:blur(72px); mix-blend-mode:screen; will-change:transform;
+  }
+  .a1{width:430px;height:310px;left:-130px;top:5%;background:radial-gradient(circle,#7b5cff,transparent 68%);opacity:.5;animation:drift1 26s ease-in-out infinite alternate}
+  .a2{width:380px;height:260px;right:-150px;top:20%;background:radial-gradient(circle,#ff8fc4,transparent 68%);opacity:.36;animation:drift2 32s ease-in-out infinite alternate}
+  .a3{width:470px;height:330px;left:-90px;bottom:2%;background:radial-gradient(circle,#5ec8ff,transparent 70%);opacity:.28;animation:drift3 38s ease-in-out infinite alternate}
+  .a4{width:330px;height:240px;right:-40px;bottom:26%;background:radial-gradient(circle,#ffd9a5,transparent 70%);opacity:.2;animation:drift2 28s ease-in-out infinite alternate-reverse}
+  .stars{position:absolute;inset:0}
+  .stars i{
+    position:absolute; display:block; background:#fff; border-radius:50%;
+    box-shadow:0 0 7px rgba(255,255,255,.75);
+    animation:twinkle var(--dur,4s) ease-in-out infinite;
+  }
+  .glow{
+    position:fixed; width:520px; height:520px; border-radius:50%; pointer-events:none;
+    background:radial-gradient(circle,rgba(183,155,255,.15),rgba(255,169,209,.075) 45%,transparent 68%);
+    filter:blur(12px); mix-blend-mode:screen; opacity:0; transition:opacity .7s ease; z-index:1;
+  }
+  .vignette{
+    position:fixed; inset:0; z-index:2; pointer-events:none;
+    background:radial-gradient(130% 100% at 50% 40%,transparent 38%,rgba(2,1,8,.58) 100%);
+  }
+  .grain{
+    position:fixed; inset:0; z-index:50; pointer-events:none; opacity:.055; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+  }
+
+  /* ---------- 版式 ---------- */
+  main{
+    position:relative; z-index:3;
+    max-width:486px; margin:0 auto;
+    padding:0 18px calc(env(safe-area-inset-bottom) + 46px);
+  }
+  .memo-head{
+    display:flex; align-items:flex-start; justify-content:space-between;
+    padding-top:calc(env(safe-area-inset-top) + 26px);
+  }
+  .brand{display:flex;flex-direction:column;gap:4px}
+  .brand .en{font-family:var(--mono);font-size:9px;letter-spacing:.3em;color:var(--ink3)}
+  .brand .cn{font-family:var(--hand);font-size:16px;letter-spacing:.16em;color:var(--ink2)}
+  .head-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px}
+  .head-right .page-no{font-family:var(--mono);font-size:9px;letter-spacing:.16em;color:var(--ink3)}
+  .head-right .clock{font-family:Georgia,var(--serif);font-size:13px;letter-spacing:.06em;color:var(--ink2);font-variant-numeric:tabular-nums}
+
+  /* ---------- 首屏主视觉 ---------- */
+  .hero{
+    position:relative;isolation:isolate;
+    margin:16px -18px 0;width:calc(100% + 36px);
+    height:min(78svh,700px);min-height:580px;
+    border-radius:0 0 28px 28px;overflow:hidden;
+    background:#0a0820;
+  }
+  .hero-media{position:absolute;inset:0;z-index:0}
+  .hero-media img{display:block;width:100%;height:100%;object-fit:cover;object-position:64% 50%}
+  .hero-scrim{
+    position:absolute;inset:0;z-index:1;pointer-events:none;
+    background:
+      radial-gradient(120% 100% at 8% 6%, rgba(5,4,14,.86) 0%, rgba(5,4,14,.42) 44%, rgba(5,4,14,0) 70%),
+      linear-gradient(180deg, rgba(5,4,14,.5) 0%, rgba(5,4,14,0) 34%, rgba(5,4,14,.16) 100%);
+  }
+  .hero-copy{position:relative;z-index:2;padding:34px 20px 0;max-width:540px}
+  .kicker{
+    display:flex;align-items:center;gap:9px;margin:0;
+    font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;color:rgba(243,237,255,.56);
+  }
+  .kicker .dot{width:5px;height:5px;border-radius:50%;background:linear-gradient(135deg,var(--lav),var(--pink));box-shadow:0 0 10px rgba(183,155,255,.9)}
+  h1{
+    margin:18px 0 0;
+    font-family:var(--hand);font-weight:400;
+    font-size:clamp(38px,11.4vw,52px);
+    line-height:1.26; letter-spacing:.02em;
+    text-shadow:0 8px 40px rgba(10,6,30,.6);
+  }
+  h1 em{
+    font-style:normal;
+    background:linear-gradient(96deg,#c9b6ff 0%,#ffb3d9 52%,#ffdca8 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    padding-right:.08em;
+    filter:drop-shadow(0 0 26px rgba(255,169,209,.28));
+  }
+  .lede{margin:20px 0 0;font-size:13.5px;line-height:2.02;color:var(--ink2);max-width:34em}
+  .lede b{color:#fff;font-weight:600}
+  .hero .lede{color:rgba(255,255,255,.8);max-width:28em}
+
+  .hero-steps{margin-top:20px;display:flex;flex-wrap:wrap;align-items:center}
+  .hero-steps .step{display:flex;align-items:center;gap:6px}
+  .hero-steps .step+.step::before{
+    content:"";width:1px;height:9px;margin:0 11px;background:rgba(255,255,255,.2);
+  }
+  .hero-steps .step b{font-family:Georgia,serif;font-weight:400;font-size:10px;color:rgba(255,169,209,.85)}
+  .hero-steps .step span{font-size:11.5px;color:var(--ink);letter-spacing:.02em}
+  .hero-steps .step i{display:none}
+
+  .hero .btn-main{margin-top:26px;text-decoration:none}
+  .hero-note{
+    margin:20px 0 0;font-family:var(--hand);font-size:14px;letter-spacing:.06em;
+    color:rgba(255,219,235,.82);transform:rotate(-1.2deg);
+  }
+  .hero-note::before{
+    content:"";display:inline-block;width:22px;height:1px;margin-right:8px;
+    background:linear-gradient(90deg,transparent,rgba(255,215,235,.6));vertical-align:middle;
+  }
+
+  /* ---------- 依据条 ---------- */
+  .evidence{margin-top:22px;padding:20px 4px 0;border-top:1px dashed rgba(255,255,255,.14)}
+  .evidence-label{margin:0;font-family:var(--mono);font-size:9px;letter-spacing:.18em;color:rgba(255,169,209,.65)}
+  .stats{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
+    margin-top:18px;
+  }
+  .stats div+div{border-left:1px solid rgba(255,255,255,.075);padding-left:14px}
+  .stats b{
+    display:block;font-family:Georgia,var(--serif);font-weight:400;font-size:clamp(23px,6.4vw,28px);
+    letter-spacing:-.01em;color:var(--ink);font-variant-numeric:tabular-nums;line-height:1.2;
+  }
+  .stats b small{font-size:11px;color:var(--ink3);margin-left:1px;letter-spacing:0}
+  .stats span{display:block;margin-top:8px;font-size:9.5px;line-height:1.7;color:var(--ink3)}
+  .evidence-note{
+    margin:16px 0 0;font-family:var(--hand);font-size:13px;line-height:1.9;
+    color:rgba(255,215,235,.6);
+  }
+  .side-source{
+    display:block;margin:12px 0 0;font-family:var(--mono);font-size:8px;
+    line-height:1.75;letter-spacing:.04em;color:rgba(243,237,255,.26);
+  }
+
+  /* ---------- 备忘录卡片 ---------- */
+  .card{
+    position:relative;display:grid;grid-template-columns:44px 1fr;
+    margin-top:22px;padding:20px 18px 22px 0;
+    border-radius:20px 22px 20px 22px;
+    background:linear-gradient(165deg,rgba(255,255,255,.085),rgba(255,255,255,.028) 56%,rgba(255,255,255,.05));
+    border:1px solid var(--line);
+    box-shadow:0 32px 70px -38px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.16);
+    backdrop-filter:blur(18px) saturate(140%);
+    overflow:hidden;
+    --r:0deg;
+  }
+  .card::after{
+    content:"";position:absolute;top:-46px;right:-34px;width:130px;height:130px;border-radius:50%;
+    background:radial-gradient(circle,rgba(255,169,209,.17),transparent 70%);
+    pointer-events:none;
+  }
+  .card .rule{
+    position:absolute;left:44px;top:16px;bottom:16px;width:1px;
+    background:linear-gradient(180deg,transparent,rgba(255,169,209,.2) 18%,rgba(255,169,209,.14) 82%,transparent);
+    pointer-events:none;
+  }
+  .card .memo-margin{
+    grid-column:1;position:relative;z-index:1;
+    padding-top:24px;text-align:center;
+    font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;color:rgba(255,169,209,.62);
+  }
+  .card .memo-body{grid-column:2;position:relative;z-index:1;min-width:0;padding-right:2px}
+  .memo-tag{
+    margin:0 0 10px;font-family:var(--mono);font-size:9px;letter-spacing:.2em;
+    color:rgba(255,169,209,.72);
+  }
+  .memo-body h2{
+    margin:0;font-family:var(--hand);font-weight:400;
+    font-size:23px;line-height:1.52;letter-spacing:.03em;color:var(--ink);
+  }
+  .sub{margin:10px 0 18px;font-size:12px;line-height:1.9;color:var(--ink3)}
+
+  /* 三行 */
+  .lines{margin-bottom:20px}
+  .line{display:block;padding:11px 0 9px;border-bottom:1px dashed rgba(255,255,255,.16);transition:border-color .3s}
+  .line:focus-within{border-bottom-color:rgba(183,155,255,.65)}
+  .line span{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--ink3);margin-bottom:7px}
+  .line span::before{
+    content:"";display:inline-block;width:11px;height:1px;margin-right:7px;vertical-align:middle;
+    background:linear-gradient(90deg,rgba(255,169,209,.75),rgba(183,155,255,.25));
+  }
+  .line input{
+    width:100%;background:transparent;border:0;outline:0;padding:0;
+    color:var(--ink);font-family:var(--hand);font-size:15px;line-height:1.5;
+    caret-color:var(--lav);
+  }
+  .line input::placeholder{color:rgba(243,237,255,.31);font-family:var(--sans);font-size:12px}
+
+  /* 按钮 */
+  .btn-main{
+    display:flex;align-items:center;justify-content:center;gap:9px;
+    width:100%;padding:14px 16px;border:0;border-radius:14px;cursor:pointer;
+    background:linear-gradient(100deg,#b79bff,#ffa9d1 58%,#ffd9b0);
+    color:#180f2e;font-family:var(--sans);font-size:13.5px;font-weight:600;letter-spacing:.02em;
+    box-shadow:0 14px 34px -14px rgba(183,155,255,.8);
+    transition:transform .22s ease,box-shadow .22s ease,filter .22s ease,background .3s ease;
+  }
+  .btn-main:hover{transform:translateY(-1px);filter:brightness(1.05);box-shadow:0 18px 38px -14px rgba(255,169,209,.65)}
+  .btn-main:active{transform:translateY(0) scale(.99)}
+  .btn-main .arrow{font-style:normal;font-size:14px;transition:transform .25s}
+  .btn-main:hover .arrow{transform:translateX(3px)}
+  .btn-main.done{background:rgba(255,255,255,.1);color:var(--ink2);box-shadow:none}
+  .btn-main.done .arrow{display:none}
+  .btn-ghost{
+    padding:13px 18px;border-radius:14px;cursor:pointer;
+    background:rgba(255,255,255,.05);border:1px solid var(--line);
+    color:var(--ink2);font-family:var(--sans);font-size:12.5px;letter-spacing:.02em;
+    transition:background .25s,border-color .25s,color .25s;
+  }
+  .btn-ghost:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.22);color:var(--ink)}
+  .saved{
+    display:none;margin:12px 0 0;font-family:var(--hand);font-size:13px;
+    color:rgba(255,215,235,.72);letter-spacing:.05em;
+  }
+  .saved.show{display:block;animation:fadeUp .5s ease both}
+  .tiny{margin:14px 0 0;font-size:10.5px;line-height:1.8;color:rgba(243,237,255,.3)}
+
+  /* 呼吸 */
+  .breath-wrap{
+    position:relative;width:212px;height:212px;margin:2px auto 16px;
+    display:grid;place-items:center;
+  }
+  .halo{
+    position:absolute;inset:0;border-radius:50%;
+    background:radial-gradient(circle,rgba(183,155,255,.38),rgba(255,169,209,.16) 44%,transparent 70%);
+    filter:blur(18px);
+    animation:haloPulse 8s ease-in-out infinite;
+  }
+  .ring{
+    position:relative;width:168px;height:168px;border-radius:50%;
+    display:grid;place-content:center;gap:6px;text-align:center;
+    border:1px solid rgba(255,255,255,.16);
+    background:radial-gradient(circle at 50% 36%,rgba(183,155,255,.16),rgba(12,9,30,.5) 72%);
+    box-shadow:inset 0 0 60px rgba(255,169,209,.09),0 0 44px rgba(183,155,255,.18);
+    transform:scale(1);
+    transition:transform 4s cubic-bezier(.45,0,.45,1);
+    will-change:transform;
+  }
+  .ring .phase{font-family:var(--hand);font-size:19px;letter-spacing:.14em;color:var(--ink)}
+  .ring .sec{font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--ink3);min-height:14px}
+  .ring .round{font-family:var(--mono);font-size:8.5px;letter-spacing:.14em;color:rgba(255,169,209,.62);min-height:12px}
+  .two-btns{display:flex;gap:9px}
+  .two-btns .btn-main{flex:1;width:auto}
+  .two-btns .btn-ghost{flex:0 0 92px}
+  .light-status{
+    margin:13px 0 0;font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;
+    color:var(--ink3);transition:color .3s;
+  }
+  .light-status.on{color:rgba(255,217,176,.78)}
+
+  /* 复盘 */
+  .q{margin-bottom:19px}
+  .q-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:9px}
+  .q-head span{font-size:12.5px;color:var(--ink2)}
+  .q-head b{font-family:Georgia,serif;font-weight:400;font-size:20px;color:var(--ink);font-variant-numeric:tabular-nums;line-height:1}
+  .q-head b i{font-style:normal;font-family:var(--sans);font-size:9.5px;color:var(--ink3);margin-left:3px}
+  .q-head .mini{font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:var(--ink3)}
+
+  input[type=range].slice{
+    -webkit-appearance:none;appearance:none;
+    width:100%;height:3px;border-radius:99px;outline:none;margin:6px 0 0;
+    background:linear-gradient(90deg,#b79bff 0%,#ffa9d1 var(--p,22%),rgba(255,255,255,.12) var(--p,22%),rgba(255,255,255,.12) 100%);
+  }
+  input[type=range].slice::-webkit-slider-thumb{
+    -webkit-appearance:none;width:19px;height:19px;border-radius:50%;cursor:pointer;
+    background:radial-gradient(circle at 34% 30%,#fff,#e0d2ff 56%,#b79bff);
+    box-shadow:0 0 0 4px rgba(183,155,255,.16),0 4px 14px rgba(0,0,0,.45);
+    transition:box-shadow .2s;
+  }
+  input[type=range].slice::-webkit-slider-thumb:hover{box-shadow:0 0 0 6px rgba(183,155,255,.22),0 4px 14px rgba(0,0,0,.45)}
+  input[type=range].slice::-moz-range-thumb{
+    width:19px;height:19px;border:0;border-radius:50%;cursor:pointer;
+    background:radial-gradient(circle at 34% 30%,#fff,#e0d2ff 56%,#b79bff);
+    box-shadow:0 0 0 4px rgba(183,155,255,.16);
+  }
+  .scale{display:flex;justify-content:space-between;margin-top:4px;font-family:var(--mono);font-size:8.5px;letter-spacing:.08em;color:rgba(243,237,255,.28)}
+
+  .chips{display:flex;gap:8px}
+  .chips button{
+    flex:1;padding:9px 0;cursor:pointer;border-radius:11px;
+    border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.03);
+    color:var(--ink2);font-family:var(--sans);font-size:12px;
+    transition:background .25s,border-color .25s,color .25s,box-shadow .25s,transform .25s;
+  }
+  .chips button:hover{background:rgba(255,255,255,.07)}
+  .chips button.on{
+    border-color:rgba(183,155,255,.6);color:var(--ink);
+    background:linear-gradient(165deg,rgba(183,155,255,.24),rgba(255,169,209,.12));
+    box-shadow:0 0 24px -8px rgba(183,155,255,.7);
+  }
+  .chips.moods button{font-family:var(--hand);font-size:13px;letter-spacing:.05em}
+
+  /* 图表 */
+  .chart-wrap{margin-top:24px;padding-top:16px;border-top:1px dashed rgba(255,255,255,.14)}
+  .chart-head{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--ink3);margin-bottom:8px}
+  .legend{display:flex;align-items:center;gap:6px;color:rgba(143,214,255,.62);letter-spacing:.06em}
+  .legend::before{content:"";width:14px;height:1px;background:repeating-linear-gradient(90deg,rgba(143,214,255,.65) 0 3px,transparent 3px 6px)}
+  .chart{display:block;width:100%;height:auto;overflow:visible}
+  .chart-note{margin:2px 0 0;text-align:center;font-family:var(--hand);font-size:12.5px;color:rgba(255,215,235,.5);letter-spacing:.05em}
+
+  /* 睡着 / 起床时间 */
+  .time-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:4px}
+  .time-field{display:flex;align-items:baseline;gap:9px;padding:8px 2px 9px;border-bottom:1px dashed rgba(255,255,255,.16);transition:border-color .3s}
+  .time-field:focus-within{border-bottom-color:rgba(183,155,255,.65)}
+  .time-field span{font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--ink3)}
+  .time-field input{
+    flex:1;min-width:0;background:none;border:0;outline:0;padding:0;
+    color:var(--ink);font-family:Georgia,var(--serif);font-size:17px;letter-spacing:.05em;
+  }
+  .time-field input::-webkit-calendar-picker-indicator{opacity:.35;cursor:pointer}
+
+  /* 睡眠分析 */
+  .analysis{margin-top:18px;padding-top:15px;border-top:1px dashed rgba(255,255,255,.14)}
+  .ana-label{margin:0;font-family:var(--mono);font-size:9px;letter-spacing:.18em;color:rgba(255,169,209,.65)}
+  .ana-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+  .ana-grid div+div{border-left:1px solid rgba(255,255,255,.075);padding-left:12px}
+  .ana-grid b{
+    display:block;font-family:Georgia,var(--serif);font-weight:400;font-size:19px;line-height:1.25;
+    color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap;
+  }
+  .ana-grid b small{font-size:10px;color:var(--ink3);margin-left:1px}
+  .ana-grid span{display:block;margin-top:5px;font-size:9px;line-height:1.6;color:var(--ink3)}
+  .ana-note{margin:12px 0 0;font-family:var(--hand);font-size:13.5px;line-height:1.85;color:rgba(255,215,235,.68);transform:rotate(-.4deg)}
+
+  .recall{margin-top:20px;padding-top:12px;border-top:1px dashed rgba(255,255,255,.14)}
+  .recall summary{
+    cursor:pointer;list-style:none;font-family:var(--mono);font-size:9px;letter-spacing:.16em;
+    color:var(--ink3);transition:color .25s;
+  }
+  .recall summary::-webkit-details-marker{display:none}
+  .recall summary::after{content:"＋";float:right;font-family:var(--sans);font-size:12px}
+  .recall[open] summary::after{content:"－"}
+  .recall summary:hover{color:var(--ink2)}
+  .recall-body{margin-top:12px;font-family:var(--hand);font-size:14px;line-height:2;color:var(--ink2)}
+  .recall-body p{margin:0 0 4px}
+  .recall-body i{font-style:normal;font-family:var(--mono);font-size:9px;color:var(--ink3);margin-right:8px}
+
+  /* 页边注 */
+  .margin-note{
+    margin-top:32px;padding-left:16px;
+    border-left:1px dashed rgba(183,155,255,.3);
+  }
+  .mn-title{margin:0 0 14px;font-family:var(--hand);font-size:15px;letter-spacing:.1em;color:rgba(255,215,235,.72)}
+  .margin-note ul{list-style:none;margin:0;padding:0}
+  .margin-note li{font-size:11.5px;line-height:1.95;color:var(--ink3);margin-bottom:14px}
+  .margin-note li b{display:block;margin-bottom:2px;font-size:12px;font-weight:600;color:var(--ink2);letter-spacing:.02em}
+
+  /* 页脚 */
+  .foot{margin-top:36px;padding-top:22px;border-top:1px solid rgba(255,255,255,.1)}
+  .foot-actions{display:flex;gap:10px;justify-content:center;margin-bottom:20px}
+  .foot-actions .btn-ghost{font-size:11.5px;padding:9px 15px;border-radius:999px}
+  .foot-note{margin:0;text-align:center;font-size:10.5px;line-height:2;color:var(--ink3)}
+  .src{margin:13px 0 0;text-align:center;font-family:var(--mono);font-size:8.5px;line-height:1.9;letter-spacing:.03em;color:rgba(243,237,255,.26)}
+
+  /* toast */
+  .toast{
+    position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 26px);
+    transform:translate(-50%,18px);opacity:0;pointer-events:none;z-index:100;
+    padding:10px 18px;border-radius:999px;
+    background:rgba(20,14,42,.92);border:1px solid rgba(255,255,255,.14);
+    backdrop-filter:blur(14px);
+    font-size:12px;color:var(--ink);letter-spacing:.02em;
+    transition:opacity .35s ease,transform .35s ease;white-space:nowrap;
+  }
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+
+  button:focus-visible,summary:focus-visible{outline:2px solid rgba(183,155,255,.72);outline-offset:3px}
+  input:focus-visible{outline:none}
+  .credit{
+    margin:16px 0 0;text-align:center;font-family:var(--mono);font-size:8px;letter-spacing:.2em;
+    color:rgba(243,237,255,.26);
+  }
+
+  /* reveal */
+  .reveal{
+    opacity:0;transform:translateY(22px) rotate(var(--r,0deg));
+    filter:blur(7px);
+    transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1),filter .9s ease;
+  }
+  .reveal.in{opacity:1;transform:rotate(var(--r,0deg));filter:none}
+  .card.reveal.in:hover{transform:rotate(var(--r,0deg)) translateY(-2px);box-shadow:0 40px 80px -40px rgba(0,0,0,.95),inset 0 1px 0 rgba(255,255,255,.2)}
+  .card{transition:opacity .9s ease,transform .5s cubic-bezier(.2,.7,.2,1),filter .9s ease,box-shadow .4s ease}
+
+  @keyframes twinkle{0%,100%{opacity:.14;transform:scale(.8)}50%{opacity:.85;transform:scale(1.18)}}
+  @keyframes drift1{0%{transform:translate3d(-3%,0,0) scale(1)}100%{transform:translate3d(7%,4%,0) scale(1.12)}}
+  @keyframes drift2{0%{transform:translate3d(2%,2%,0) scale(1.08)}100%{transform:translate3d(-6%,-3%,0) scale(.96)}}
+  @keyframes drift3{0%{transform:translate3d(0,2%,0) scale(1)}100%{transform:translate3d(8%,-4%,0) scale(1.1)}}
+  @keyframes haloPulse{0%,100%{transform:scale(.9);opacity:.5}50%{transform:scale(1.1);opacity:.92}}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+  /* 减弱动效偏好（可访问性） */
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important}
+    .reveal{opacity:1;transform:rotate(var(--r,0deg));filter:none}
+  }
+
+  /* ---------- 平板 ---------- */
+  @media (min-width:680px) and (max-width:919px){
+    main{max-width:620px;padding:0 28px calc(env(safe-area-inset-bottom) + 56px)}
+    .memo-head{padding-top:32px}
+    .hero{
+      margin:18px -28px 0;width:calc(100% + 56px);
+      height:min(74svh,660px);min-height:560px;
+    }
+    .hero-copy{padding:30px 32px 0;max-width:540px}
+    h1{font-size:56px}
+    .lede{font-size:14px}
+    .stats b{font-size:32px}
+    .card{padding:22px 20px 24px 0;grid-template-columns:46px 1fr}
+    .card .rule{left:46px}
+    .memo-body h2{font-size:25px}
+  }
+
+  /* ---------- 桌面：杂志式双栏 ---------- */
+  @media (min-width:920px){
+    main{max-width:1120px;padding:0 40px calc(env(safe-area-inset-bottom) + 64px)}
+
+    .memo-head{padding-top:34px;padding-bottom:18px;border-bottom:1px solid rgba(255,255,255,.09)}
+    .brand .en{font-size:9.5px}
+    .brand .cn{font-size:18px}
+    .head-right{flex-direction:row;align-items:baseline;gap:18px}
+    .head-right .page-no{font-size:9.5px}
+    .head-right .clock{font-size:15px}
+
+    .hero{
+      margin:32px 0 0;width:auto;height:clamp(560px,64vh,660px);min-height:0;
+      display:grid;grid-template-columns:1fr .94fr;gap:50px;
+      border-radius:0;overflow:visible;background:none;isolation:auto;
+    }
+    .hero-media{
+      grid-column:2;grid-row:1;
+      position:relative;inset:auto;z-index:0;border-radius:24px;overflow:hidden;
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:0 40px 90px -50px rgba(0,0,0,.95),inset 0 1px 0 rgba(255,255,255,.16);
+    }
+    .hero-media img{height:100%;object-position:center}
+    .hero-scrim{display:none}
+    .hero-copy{
+      grid-column:1;grid-row:1;
+      padding:10px 0;max-width:540px;
+      display:flex;flex-direction:column;justify-content:center;
+    }
+    h1{font-size:clamp(58px,5.9vw,80px);line-height:1.2;letter-spacing:.015em;margin-top:20px}
+    .hero .lede{font-size:14.5px;line-height:2;margin-top:22px;max-width:28em}
+    .hero-steps{margin-top:26px;flex-direction:column;gap:13px;align-items:flex-start}
+    .hero-steps .step{display:grid;grid-template-columns:24px 1fr;gap:2px 10px;align-items:baseline}
+    .hero-steps .step+.step::before{display:none}
+    .hero-steps .step b{font-size:11px}
+    .hero-steps .step span{font-size:13px}
+    .hero-steps .step i{display:block;grid-column:2;font-style:normal;font-size:10.5px;line-height:1.7;color:rgba(243,237,255,.5)}
+    .hero .btn-main{width:auto;align-self:flex-start;margin-top:30px;padding:14px 26px}
+    .hero-note{font-size:16px;margin-top:24px}
+
+    .evidence{
+      display:grid;grid-template-columns:1.45fr .55fr;gap:12px 34px;align-items:center;
+      margin-top:46px;padding-top:24px;
+    }
+    .evidence-label{grid-column:1/-1}
+    .evidence .stats{grid-column:1;margin-top:0}
+    .evidence .stats b{font-size:clamp(28px,2.8vw,36px)}
+    .evidence-note{grid-column:2;margin:0;font-size:14px;line-height:1.9}
+    .side-source{grid-column:1/-1;margin-top:4px}
+
+    .notes-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:stretch;margin-top:22px}
+    .notes-grid .card{margin-top:0}
+    .notes-grid .memo-body{display:flex;flex-direction:column}
+    .notes-grid .lines{flex:1;display:flex;flex-direction:column;justify-content:space-evenly;margin-bottom:16px}
+    .notes-grid .lines .line{padding:13px 0 11px}
+    .notes-grid .breath-wrap{flex:1;margin:2px auto 12px}
+    .notes-grid .memo-body>.btn-main{margin-top:auto}
+
+    .card{padding:24px 22px 26px 0;grid-template-columns:52px 1fr;border-radius:22px}
+    .card .rule{left:52px}
+    .card .memo-margin{padding-top:30px;font-size:10px}
+    .memo-tag{font-size:9.5px}
+    .memo-body h2{font-size:27px;line-height:1.48}
+    .sub{font-size:12.5px;line-height:1.9;margin-bottom:20px}
+    .two-btns .btn-ghost{flex:0 0 106px}
+
+    .review-grid{display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:start}
+    .review-data{border-left:1px dashed rgba(255,255,255,.14);padding-left:34px}
+    .chart-wrap{margin-top:0;padding-top:0;border-top:0}
+    .chart-head{margin-bottom:14px}
+    .recall{margin-top:26px}
+
+    .margin-note{
+      margin-top:46px;padding:26px 0 0;
+      border-left:0;border-top:1px dashed rgba(183,155,255,.28);
+    }
+    .mn-title{margin-bottom:18px;font-size:16px}
+    .margin-note ul{display:grid;grid-template-columns:repeat(4,1fr);gap:26px}
+    .margin-note li{
+      margin-bottom:0;padding-left:14px;
+      border-left:1px solid rgba(255,255,255,.075);
+    }
+    .margin-note li:first-child{padding-left:0;border-left:0}
+
+    .foot{margin-top:48px;padding-top:26px}
+    .foot-note{font-size:11px}
+    .credit{font-size:8.5px}
+
+    /* 宽屏下的夜空：放大光斑与月亮 */
+    .moon{width:420px;height:420px;right:-80px;top:-120px;opacity:.45}
+    .a1{width:760px;height:520px;left:-180px;top:0}
+    .a2{width:680px;height:460px;right:-200px;top:14%}
+    .a3{width:820px;height:560px;left:-140px;bottom:-4%}
+    .a4{width:560px;height:400px;right:-60px;bottom:22%}
+  }
+
+  @media (max-width:380px){
+    main{padding:0 14px 44px}
+    h1{font-size:36px}
+    .card{grid-template-columns:38px 1fr;padding:18px 14px 20px 0}
+    .card .rule{left:38px}
+    .stats{gap:6px}
+    .stats div+div{padding-left:10px}
+    .stats span{font-size:9px}
+    .two-btns .btn-ghost{flex:0 0 78px;padding:13px 10px;font-size:11.5px}
+    .breath-wrap{width:196px;height:196px}
+    .ring{width:156px;height:156px}
+  }
+</style>
+</head>
+<body>
+<div class="sky">
+  <div class="moon"></div>
+  <div class="aurora a1"></div>
+  <div class="aurora a2"></div>
+  <div class="aurora a3"></div>
+  <div class="aurora a4"></div>
+  <div class="stars" id="stars"></div>
+</div>
+<div class="glow" id="glow"></div>
+<div class="vignette"></div>
+<div class="grain"></div>
+
+<main>
+  <header class="memo-head reveal">
+    <div class="brand">
+      <span class="en">SLEEP&nbsp;MEMO</span>
+      <span class="cn">睡眠备忘录</span>
+    </div>
+    <div class="head-right">
+      <span class="page-no" id="pageNo">第 001 页</span>
+      <span class="clock" id="clock">23:15</span>
+    </div>
+  </header>
+
+  <section class="hero reveal">
+    <div class="hero-media"><img src="assets/hero-clean.jpg" alt="云海上的床与月亮，渐变梦幻夜空"></div>
+    <div class="hero-scrim"></div>
+    <div class="hero-copy">
+      <p class="kicker"><span class="dot"></span><span id="dateText">2026 年 10 月 24 日 · 周六</span></p>
+      <h1>把今天，<br><em>轻轻放下</em>。</h1>
+      <p class="lede">三步，把大脑调成睡眠模式。</p>
+      <div class="hero-steps">
+        <div class="step"><b>01</b><span>清空大脑</span><i>写下三行，把「还没完」交给纸</i></div>
+        <div class="step"><b>02</b><span>放慢呼吸</span><i>4-7-8 三轮，不逼自己睡着</i></div>
+        <div class="step"><b>03</b><span>早上回看</span><i>10 秒记录，让趋势替你判断</i></div>
+      </div>
+      <a class="btn-main" href="#dump"><span>开始今晚的关机仪式</span><i class="arrow">→</i></a>
+      <p class="hero-note">今晚，先不和自己较劲。</p>
+    </div>
+  </section>
+
+  <div class="notes-grid">
+  <article class="card reveal" id="dump" style="--r:-.35deg">
+    <span class="rule"></span>
+    <div class="memo-margin">01</div>
+    <div class="memo-body">
+      <p class="memo-tag">睡前 · 只写三行</p>
+      <h2>把脑子里的东西，<br>先写在纸上。</h2>
+      <p class="sub">不用写完整，也不用写好看。填完三行，今晚的任务就算完成。</p>
+
+      <div class="lines">
+        <label class="line">
+          <span>今天没做完的</span>
+          <input id="dumpA" type="text" autocomplete="off" placeholder="那封没回的邮件、没洗的碗……">
+        </label>
+        <label class="line">
+          <span>明天第一件要面对的</span>
+          <input id="dumpB" type="text" autocomplete="off" placeholder="9:30 的会，先打开哪份文档">
+        </label>
+        <label class="line">
+          <span>此刻心里悬着的</span>
+          <input id="dumpC" type="text" autocomplete="off" placeholder="怕明天说错话 / 体检结果还没出">
+        </label>
+      </div>
+
+      <button class="btn-main" id="saveDump"><span id="dumpBtnText">写完，放下</span><i class="arrow">→</i></button>
+      <p class="saved" id="dumpHint">已替你收好。明早起来，再回来划掉。</p>
+    </div>
+  </article>
+
+  <article class="card reveal" style="--r:.32deg">
+    <span class="rule"></span>
+    <div class="memo-margin">02</div>
+    <div class="memo-body">
+      <p class="memo-tag">关灯 · 4-7-8</p>
+      <h2>把呼吸，<br>放慢一点。</h2>
+      <p class="sub">4 秒吸气，7 秒屏住，8 秒呼气。三轮就够，不用逼自己睡着。</p>
+
+      <div class="breath-wrap">
+        <div class="halo"></div>
+        <div class="ring" id="breathRing">
+          <span class="phase" id="breathPhase">准备好</span>
+          <span class="sec" id="breathSec">4 · 7 · 8</span>
+          <span class="round" id="breathRound"></span>
+        </div>
+      </div>
+
+      <div class="two-btns">
+        <button class="btn-main" id="breatheBtn">开始呼吸</button>
+        <button class="btn-ghost" id="lightsBtn">关灯</button>
+      </div>
+      <p class="light-status" id="lightStatus">还没有关灯记录</p>
+      <p class="tiny">关灯之后，把手机放到伸手够不到的地方。</p>
+    </div>
+  </article>
+  </div>
+
+  <article class="card reveal" style="--r:-.24deg">
+    <span class="rule"></span>
+    <div class="memo-margin">03</div>
+    <div class="memo-body">
+      <p class="memo-tag">早上 · 10 秒</p>
+      <h2>记下昨晚，<br>趋势才会说话。</h2>
+      <p class="sub">感觉会骗人，记录不会。十秒就够。</p>
+
+      <div class="review-grid">
+        <div class="review-form">
+          <div class="q">
+            <div class="q-head">
+              <span>昨晚大概多久睡着？</span>
+              <b><span id="latencyVal">20</span><i>分钟</i></b>
+            </div>
+            <input class="slice" type="range" id="latency" min="0" max="90" step="1" value="20" aria-label="入睡耗时（分钟）">
+            <div class="scale"><span>倒头就睡</span><span>90+</span></div>
+          </div>
+
+          <div class="q">
+            <div class="q-head"><span>几点睡着、几点起？</span><span class="mini">大概就行</span></div>
+            <div class="time-row">
+              <label class="time-field"><span>睡着</span><input type="time" id="sleepAt" value="23:30"></label>
+              <label class="time-field"><span>起床</span><input type="time" id="wakeAt" value="07:00"></label>
+            </div>
+          </div>
+
+          <div class="q">
+            <div class="q-head"><span>夜里醒了几次？</span><span class="mini">包括醒了又睡</span></div>
+            <div class="chips" id="wakes">
+              <button data-w="0" class="on">0</button>
+              <button data-w="1">1</button>
+              <button data-w="2">2</button>
+              <button data-w="3">3+</button>
+            </div>
+          </div>
+
+          <div class="q">
+            <div class="q-head"><span>起床时感觉？</span></div>
+            <div class="chips moods" id="moods">
+              <button data-m="deep">睡沉了</button>
+              <button data-m="ok" class="on">还行</button>
+              <button data-m="tired">像没睡</button>
+            </div>
+          </div>
+
+          <button class="btn-main" id="saveNight">记下昨晚</button>
+        </div>
+
+        <div class="review-data">
+          <div class="chart-wrap">
+            <div class="chart-head"><span>最近七晚 · 入睡耗时 / 分钟</span><span class="legend">20 min 健康线</span></div>
+            <div id="chart"></div>
+          </div>
+
+          <div class="analysis" id="analysis">
+            <p class="ana-label">睡眠分析 · ANALYSIS</p>
+            <div class="ana-grid">
+              <div><b id="anaLatency">—</b><span>平均入睡</span></div>
+              <div><b id="anaDuration">—</b><span>平均时长</span></div>
+              <div><b id="anaRegular">—</b><span>作息波动</span></div>
+            </div>
+            <p class="ana-note" id="anaNote">再记几晚，分析才开始说话。</p>
+          </div>
+
+          <details class="recall" id="recall">
+            <summary>昨晚写下的三行</summary>
+            <div class="recall-body" id="recallBody"></div>
+          </details>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <aside class="evidence reveal">
+    <p class="evidence-label">为什么是这三步 / WHY IT WORKS</p>
+    <div class="stats">
+      <div><b>43.6<small>%</small></b><span>入睡困难<br>是最常见的困扰</span></div>
+      <div><b>23:15</b><span>全国平均<br>入睡时间</span></div>
+      <div><b>≤20<small>min</small></b><span>健康的<br>入睡耗时</span></div>
+    </div>
+    <p class="evidence-note">不是意志力差，是大脑还没收到「可以关机」的信号。<br>写下来、慢呼吸、看趋势——三步，把信号补上。</p>
+    <span class="side-source">SOURCE — 2025 中国睡眠健康调查报告 / 2025 中国睡眠健康研究白皮书 / 人民网睡眠调查</span>
+  </aside>
+
+  <aside class="margin-note reveal">
+    <p class="mn-title">页边注 · 四个真相</p>
+    <ul>
+      <li><b>20 分钟法则</b>躺下 20–30 分钟还清醒，就起身去客厅，做点无聊的事，困了再回床。别在床上和清醒较劲。</li>
+      <li><b>越想睡，越清醒</b>反复看时间、算「还能睡几小时」，会让大脑进入警戒状态。把判断交给记录，不交给心算。</li>
+      <li><b>下午的咖啡，凌晨还在</b>咖啡因半衰期约 5–6 小时。14:00 那杯，到 0:00 体内还剩四分之一。</li>
+      <li><b>先固定起床时间</b>入睡很难命令，起床可以。连续两周固定起床，困意会自己提前。</li>
+    </ul>
+  </aside>
+
+  <footer class="foot reveal">
+    <div class="foot-actions">
+      <button class="btn-ghost" id="exportBtn">导出备份</button>
+      <button class="btn-ghost" id="clearBtn">清空数据</button>
+    </div>
+    <p class="foot-note">
+      所有记录只保存在这台设备的浏览器里。<br>
+      这不是医疗建议。若失眠每周 ≥3 次、持续 ≥3 个月并影响白天，请就诊——CBT-I 是首选的非药物疗法。
+    </p>
+    <p class="credit">BUILT WITH TRAE · SINGLE FILE HTML · OFFLINE READY</p>
+    <p class="src">数据来源：2025 中国睡眠健康调查报告 / 2025 中国睡眠健康研究白皮书 / 人民网睡眠调查 / CBT-I 刺激控制原则</p>
+  </footer>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  const KEY = "sleep-memo.v1";
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => Array.prototype.slice.call(r.querySelectorAll(s));
+  const pad = n => String(n).padStart(2, "0");
+  const ymd = d => d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+  const week = ["周日","周一","周二","周三","周四","周五","周六"];
+
+  // 一夜归属：中午 12 点前的记录算「昨晚」
+  function nightKey(d = new Date()){
+    const x = new Date(d);
+    if (x.getHours() < 12) x.setDate(x.getDate() - 1);
+    return ymd(x);
+  }
+  function fmtTime(ts){
+    const d = new Date(ts);
+    return pad(d.getHours()) + ":" + pad(d.getMinutes());
+  }
+
+  // ---------- 存储 ----------
+  let data = { dumps:{}, nights:{}, lightsOut:null };
+  try {
+    const raw = localStorage.getItem(KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      data.dumps = parsed.dumps || {};
+      data.nights = parsed.nights || {};
+      data.lightsOut = parsed.lightsOut || null;
+    }
+  } catch(e){ /* 隐私模式等 */ }
+
+  function save(){
+    try { localStorage.setItem(KEY, JSON.stringify(data)); }
+    catch(e) { toast("浏览器存储不可用，这次记录不会被保存"); }
+  }
+
+  // ---------- 时钟 / 日期 ----------
+  function tickClock(){
+    const now = new Date();
+    $("#clock").textContent = pad(now.getHours()) + ":" + pad(now.getMinutes());
+    $("#dateText").textContent = now.getFullYear() + " 年 " + (now.getMonth()+1) + " 月 " + now.getDate() + " 日 · " + week[now.getDay()];
+  }
+  tickClock();
+  setInterval(tickClock, 5000);
+
+  function renderPageNo(){
+    const n = Object.keys(data.nights).length + 1;
+    $("#pageNo").textContent = "第 " + String(n).padStart(3, "0") + " 页";
+  }
+  renderPageNo();
+
+  // ---------- 星点 ----------
+  (function stars(){
+    const box = $("#stars");
+    const frag = document.createDocumentFragment();
+    for (let i = 0; i < 66; i++){
+      const s = document.createElement("i");
+      const size = (Math.random() * 1.6 + .55).toFixed(2);
+      s.style.left = (Math.random() * 100).toFixed(2) + "%";
+      s.style.top = (Math.random() * 80).toFixed(2) + "%";
+      s.style.width = size + "px";
+      s.style.height = size + "px";
+      s.style.opacity = (Math.random() * .5 + .18).toFixed(2);
+      s.style.setProperty("--dur", (3 + Math.random() * 4).toFixed(1) + "s");
+      s.style.animationDelay = (Math.random() * 5).toFixed(1) + "s";
+      frag.appendChild(s);
+    }
+    box.appendChild(frag);
+  })();
+
+  // ---------- 指针柔光 ----------
+  if (window.matchMedia && window.matchMedia("(pointer:fine)").matches){
+    const glow = $("#glow");
+    window.addEventListener("pointermove", function(e){
+      glow.style.transform = "translate(" + (e.clientX - 260) + "px," + (e.clientY - 260) + "px)";
+      glow.style.opacity = "1";
+    }, { passive:true });
+    window.addEventListener("pointerleave", function(){ glow.style.opacity = "0"; });
+  }
+
+  // ---------- 滚动淡入 ----------
+  (function reveal(){
+    const items = $$(".reveal");
+    if (!("IntersectionObserver" in window)){
+      items.forEach(el => el.classList.add("in"));
+      return;
+    }
+    const io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (en.isIntersecting){
+          en.target.classList.add("in");
+          io.unobserve(en.target);
+        }
+      });
+    }, { threshold:.12, rootMargin:"0px 0px -40px 0px" });
+    items.forEach(function(el, i){
+      if (el.classList.contains("memo-head") || el.classList.contains("hero")){
+        setTimeout(function(){ el.classList.add("in"); }, 80 + i * 90);
+      } else {
+        io.observe(el);
+      }
+    });
+  })();
+
+  // ---------- toast ----------
+  let toastTimer;
+  function toast(msg){
+    const t = $("#toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ t.classList.remove("show"); }, 2300);
+  }
+
+  // ---------- 01 清空大脑 ----------
+  const dumpIds = ["dumpA","dumpB","dumpC"];
+
+  function setDumpSaved(saved){
+    const btn = $("#saveDump");
+    $("#dumpBtnText").textContent = saved ? "已收好" : "写完，放下";
+    btn.classList.toggle("done", saved);
+    $("#dumpHint").classList.toggle("show", saved);
+  }
+
+  function loadDump(){
+    const rec = data.dumps[nightKey()];
+    if (!rec) return;
+    dumpIds.forEach(function(id){ $("#" + id).value = rec[id] || ""; });
+    if (rec.savedAt && (rec.dumpA || rec.dumpB || rec.dumpC)) setDumpSaved(true);
+  }
+  loadDump();
+
+  dumpIds.forEach(function(id){
+    $("#" + id).addEventListener("input", function(){
+      if ($("#saveDump").classList.contains("done")) setDumpSaved(false);
+    });
+  });
+
+  $("#saveDump").addEventListener("click", function(){
+    const rec = { savedAt: Date.now() };
+    dumpIds.forEach(function(id){ rec[id] = $("#" + id).value.trim(); });
+    data.dumps[nightKey()] = rec;
+    save();
+    setDumpSaved(true);
+    const any = rec.dumpA || rec.dumpB || rec.dumpC;
+    toast(any ? "已收好 · 明早见" : "写一行也算数");
+    renderRecall();
+  });
+
+  // ---------- 02 呼吸 ----------
+  let breathToken = 0;
+  let breathing = false;
+  const ring = $("#breathRing");
+  const phaseEl = $("#breathPhase");
+  const secEl = $("#breathSec");
+  const roundEl = $("#breathRound");
+  const breatheBtn = $("#breatheBtn");
+
+  const PHASES = [
+    { name:"吸气", sec:4, scale:1.17 },
+    { name:"屏住", sec:7, scale:1.17 },
+    { name:"呼气", sec:8, scale:.84 }
+  ];
+  const wait = ms => new Promise(function(r){ setTimeout(r, ms); });
+
+  async function breathe(){
+    const token = ++breathToken;
+    breathing = true;
+    breatheBtn.textContent = "停下来";
+    breatheBtn.classList.remove("done");
+
+    for (let round = 1; round <= 3; round++){
+      roundEl.textContent = "第 " + round + " / 3 轮";
+      for (let i = 0; i < PHASES.length; i++){
+        if (token !== breathToken) return;
+        const p = PHASES[i];
+        phaseEl.textContent = p.name;
+        ring.style.transitionDuration = p.sec + "s";
+        ring.style.transform = "scale(" + p.scale + ")";
+        for (let s = p.sec; s > 0; s--){
+          secEl.textContent = s + "″";
+          await wait(1000);
+          if (token !== breathToken) return;
+        }
+      }
+    }
+
+    breathing = false;
+    ring.style.transitionDuration = "1.6s";
+    ring.style.transform = "scale(1)";
+    phaseEl.textContent = "慢下来了";
+    secEl.textContent = "可以关灯了";
+    roundEl.textContent = "完成 3 轮";
+    breatheBtn.textContent = "再来三轮";
+  }
+
+  function stopBreath(){
+    breathToken++;
+    breathing = false;
+    ring.style.transitionDuration = "1.2s";
+    ring.style.transform = "scale(1)";
+    phaseEl.textContent = "已暂停";
+    secEl.textContent = "—";
+    roundEl.textContent = "4 · 7 · 8";
+    breatheBtn.textContent = "开始呼吸";
+  }
+
+  breatheBtn.addEventListener("click", function(){
+    if (breathing) stopBreath(); else breathe();
+  });
+
+  // 关灯记录
+  function renderLights(){
+    const el = $("#lightStatus");
+    const btn = $("#lightsBtn");
+    const lo = data.lightsOut;
+    if (lo && lo.day === nightKey()){
+      const mins = Math.max(0, Math.round((Date.now() - lo.ts) / 60000));
+      el.textContent = "灯已关 " + fmtTime(lo.ts) + " · 已过 " + mins + " 分钟";
+      el.classList.add("on");
+      btn.textContent = "重新关灯";
+    } else {
+      el.textContent = "还没有关灯记录";
+      el.classList.remove("on");
+      btn.textContent = "关灯";
+    }
+  }
+  renderLights();
+  setInterval(renderLights, 60000);
+
+  $("#lightsBtn").addEventListener("click", function(){
+    data.lightsOut = { day: nightKey(), ts: Date.now() };
+    save();
+    renderLights();
+    toast("灯已关 · 别再拿起手机了");
+  });
+
+  // ---------- 03 复盘 ----------
+  let wakesVal = 0;
+  let moodVal = "ok";
+
+  const latency = $("#latency");
+  const sleepAt = $("#sleepAt"), wakeAt = $("#wakeAt");
+  let sleepAtTouched = false;
+
+  function fmtHM(mins){
+    mins = ((Math.round(mins) % 1440) + 1440) % 1440;
+    const h = Math.floor(mins / 60), m = mins % 60;
+    return String(h).padStart(2, "0") + ":" + String(m).padStart(2, "0");
+  }
+  function lightsOutToday(){
+    return (data.lightsOut && data.lightsOut.day === nightKey()) ? data.lightsOut.ts : null;
+  }
+  function deriveSleepAt(){
+    const lo = lightsOutToday();
+    if (lo == null || sleepAtTouched) return;
+    const d = new Date(lo);
+    sleepAt.value = fmtHM(d.getHours() * 60 + d.getMinutes() + (+latency.value));
+  }
+  sleepAt.addEventListener("input", function(){ sleepAtTouched = true; });
+
+  function paintLatency(){
+    const v = +latency.value;
+    $("#latencyVal").textContent = v >= 90 ? "90+" : String(v);
+    latency.style.setProperty("--p", (v / 90 * 100).toFixed(1) + "%");
+    deriveSleepAt();
+  }
+  latency.addEventListener("input", paintLatency);
+  paintLatency();
+
+  $("#wakes").addEventListener("click", function(e){
+    const b = e.target.closest("button[data-w]");
+    if (!b) return;
+    wakesVal = +b.dataset.w;
+    $$("#wakes button").forEach(function(x){ x.classList.toggle("on", x === b); });
+  });
+
+  $("#moods").addEventListener("click", function(e){
+    const b = e.target.closest("button[data-m]");
+    if (!b) return;
+    moodVal = b.dataset.m;
+    $$("#moods button").forEach(function(x){ x.classList.toggle("on", x === b); });
+  });
+
+  function loadNight(){
+    const rec = data.nights[nightKey()];
+    if (!rec) return;
+    latency.value = rec.latency;
+    wakesVal = rec.wakes;
+    moodVal = rec.mood;
+    if (rec.sleepAt){ sleepAt.value = rec.sleepAt; sleepAtTouched = true; }
+    if (rec.wakeAt) wakeAt.value = rec.wakeAt;
+    paintLatency();
+    $$("#wakes button").forEach(function(b){ b.classList.toggle("on", +b.dataset.w === wakesVal); });
+    $$("#moods button").forEach(function(b){ b.classList.toggle("on", b.dataset.m === moodVal); });
+  }
+  loadNight();
+
+  $("#saveNight").addEventListener("click", function(){
+    const k = nightKey();
+    data.nights[k] = {
+      latency: +latency.value,
+      sleepAt: sleepAt.value || null,
+      wakeAt: wakeAt.value || null,
+      wakes: wakesVal,
+      mood: moodVal,
+      savedAt: Date.now(),
+      lightsOut: lightsOutToday()
+    };
+    save();
+    renderChart();
+    renderAnalysis();
+    renderPageNo();
+    toast("记下了 · 趋势已更新");
+  });
+
+  // ---------- 七晚图表 ----------
+  function last7Keys(){
+    const base = new Date();
+    if (base.getHours() < 12) base.setDate(base.getDate() - 1);
+    const keys = [];
+    for (let i = 6; i >= 0; i--){
+      const d = new Date(base);
+      d.setDate(base.getDate() - i);
+      keys.push(ymd(d));
+    }
+    return keys;
+  }
+
+  function renderChart(){
+    const keys = last7Keys();
+    const recs = keys.map(function(k){ return data.nights[k] || null; });
+    const has = recs.some(Boolean);
+
+    const W = 340, H = 152;
+    const padL = 6, padR = 6, top = 20, bottom = 118;
+    const max = 90;
+    const step = (W - padL - padR) / 7;
+    const bw = 20;
+
+    let svg = '<svg class="chart" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="最近七晚入睡耗时柱状图">';
+    svg += '<defs><linearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1">';
+    svg += '<stop offset="0%" stop-color="#c9b6ff" stop-opacity=".95"/>';
+    svg += '<stop offset="55%" stop-color="#ffa9d1" stop-opacity=".8"/>';
+    svg += '<stop offset="100%" stop-color="#ffd9b0" stop-opacity=".55"/>';
+    svg += '</linearGradient>';
+    svg += '<linearGradient id="ghostGrad" x1="0" y1="0" x2="0" y2="1">';
+    svg += '<stop offset="0%" stop-color="#ffffff" stop-opacity=".12"/>';
+    svg += '<stop offset="100%" stop-color="#ffffff" stop-opacity=".02"/>';
+    svg += '</linearGradient></defs>';
+
+    // 20 分钟健康线
+    const y20 = bottom - (20 / max) * (bottom - top);
+    svg += '<line x1="' + padL + '" y1="' + y20.toFixed(1) + '" x2="' + (W - padR) + '" y2="' + y20.toFixed(1) + '" stroke="#8fd6ff" stroke-opacity=".38" stroke-width="1" stroke-dasharray="3 4"/>';
+
+    recs.forEach(function(rec, i){
+      const cx = padL + step * i + step / 2;
+      const x = cx - bw / 2;
+      if (!rec){
+        svg += '<rect x="' + x.toFixed(1) + '" y="' + (bottom - 7) + '" width="' + bw + '" height="7" rx="3.5" fill="url(#ghostGrad)"/>';
+      } else {
+        const v = Math.min(rec.latency, max);
+        const h = Math.max(5, (v / max) * (bottom - top));
+        const y = bottom - h;
+        svg += '<rect x="' + x.toFixed(1) + '" y="' + y.toFixed(1) + '" width="' + bw + '" height="' + h.toFixed(1) + '" rx="5" fill="url(#barGrad)"/>';
+        if (rec.latency <= 20) {
+          svg += '<circle cx="' + cx.toFixed(1) + '" cy="' + (y - 8).toFixed(1) + '" r="2" fill="#8fd6ff" fill-opacity=".85"/>';
+        }
+        svg += '<text x="' + cx.toFixed(1) + '" y="' + (y - 4).toFixed(1) + '" text-anchor="middle" font-family="Georgia,serif" font-size="10" fill="rgba(243,237,255,.75)">' + rec.latency + '</text>';
+      }
+      const parts = keys[i].split("-");
+      const label = (+parts[1]) + "/" + (+parts[2]);
+      svg += '<text x="' + cx.toFixed(1) + '" y="' + (bottom + 17) + '" text-anchor="middle" font-family="Consolas,monospace" font-size="8" fill="rgba(243,237,255,.32)" letter-spacing=".04em">' + label + '</text>';
+    });
+
+    // 基线
+    svg += '<line x1="' + padL + '" y1="' + bottom + '" x2="' + (W - padR) + '" y2="' + bottom + '" stroke="rgba(255,255,255,.1)" stroke-width="1"/>';
+    svg += '</svg>';
+
+    if (!has) svg += '<p class="chart-note">记满三晚，趋势才会显形。</p>';
+    else {
+      const count = recs.filter(Boolean).length;
+      if (count < 3) svg += '<p class="chart-note">再记 ' + (3 - count) + ' 晚，趋势更准。</p>';
+    }
+    $("#chart").innerHTML = svg;
+  }
+  renderChart();
+
+  // ---------- 睡眠分析 ----------
+  function toMin(t){
+    const p = t.split(":");
+    return (+p[0]) * 60 + (+p[1]);
+  }
+  function sleepMin(t){ // 凌晨时间归入前一晚（00:30 → 1470 分钟）
+    const m = toMin(t);
+    return m < 720 ? m + 1440 : m;
+  }
+  function renderAnalysis(){
+    const keys = Object.keys(data.nights).sort();
+    const recs = keys.map(function(k){ return data.nights[k]; });
+    const lat = recs.map(function(r){ return r.latency; }).filter(function(v){ return typeof v === "number"; });
+    const durs = recs.map(function(r){
+      if (!r.sleepAt || !r.wakeAt) return null;
+      let d = toMin(r.wakeAt) + 1440 - sleepMin(r.sleepAt);
+      d = ((d % 1440) + 1440) % 1440;
+      return (d >= 120 && d <= 960) ? d : null;
+    }).filter(function(v){ return v != null; });
+    const sleeps = recs.map(function(r){ return r.sleepAt ? sleepMin(r.sleepAt) : null; }).filter(function(v){ return v != null; });
+
+    const avg = function(arr){ return arr.length ? arr.reduce(function(a,b){ return a+b; },0) / arr.length : null; };
+    const latAvg = avg(lat) != null ? Math.round(avg(lat)) : null;
+    const durAvg = avg(durs) != null ? Math.round(avg(durs)) : null;
+    let reg = null;
+    if (sleeps.length >= 2){
+      const mean = sleeps.reduce(function(a,b){ return a+b; },0) / sleeps.length;
+      const variance = sleeps.reduce(function(a,b){ return a + (b - mean) * (b - mean); },0) / sleeps.length;
+      reg = Math.round(Math.sqrt(variance));
+    }
+
+    $("#anaLatency").innerHTML = latAvg == null ? "—" : latAvg + "<small> 分钟</small>";
+    if (durAvg == null) $("#anaDuration").innerHTML = "—";
+    else {
+      const h = Math.floor(durAvg / 60), m = durAvg % 60;
+      $("#anaDuration").innerHTML = h + "<small> 小时 </small>" + (m ? m + "<small> 分</small>" : "");
+    }
+    $("#anaRegular").innerHTML = reg == null ? "—" : "±" + reg + "<small> 分钟</small>";
+
+    const n = recs.length;
+    let note;
+    if (n < 3) note = "再记 " + (3 - n) + " 晚，分析才开始说话。";
+    else {
+      const parts = [];
+      if (latAvg != null){
+        if (latAvg <= 20) parts.push("入睡耗时稳在健康线内，很好");
+        else if (latAvg > 35) parts.push("入睡偏慢（平均 " + latAvg + " 分钟）——睡前三行 + 三轮呼吸，坚持一周再看");
+        else parts.push("入睡耗时在临界线附近（平均 " + latAvg + " 分钟），继续记录");
+      }
+      if (durAvg != null && durAvg < 420) parts.push("时长偏短，先把起床时间固定住");
+      if (reg != null && reg > 45) parts.push("作息波动 ±" + reg + " 分钟偏大，规律比早睡更重要");
+      if (!parts.length) parts.push("各项都在健康区，保持现在的节奏");
+      note = parts[0] + (parts[1] ? "；" + parts[1] : "") + "。";
+    }
+    $("#anaNote").textContent = note;
+  }
+  renderAnalysis();
+
+  // ---------- 回看昨晚的三行 ----------
+  function renderRecall(){
+    const rec = data.dumps[nightKey()];
+    const box = $("#recall");
+    const body = $("#recallBody");
+    if (!rec || !(rec.dumpA || rec.dumpB || rec.dumpC)){
+      box.style.display = "none";
+      return;
+    }
+    box.style.display = "";
+    const labels = ["今天没做完的","明天要面对的","心里悬着的"];
+    const vals = [rec.dumpA, rec.dumpB, rec.dumpC];
+    let html = "";
+    vals.forEach(function(v, i){
+      if (v) html += "<p><i>" + labels[i] + "</i>" + escapeHtml(v) + "</p>";
+    });
+    body.innerHTML = html;
+  }
+  function escapeHtml(s){
+    return s.replace(/[&<>"']/g, function(c){
+      return ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" })[c];
+    });
+  }
+  renderRecall();
+
+  // ---------- 导出 / 清空 ----------
+  $("#exportBtn").addEventListener("click", function(){
+    const payload = {
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      dumps: data.dumps,
+      nights: data.nights,
+      lightsOut: data.lightsOut
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type:"application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "sleep-memo-" + ymd(new Date()) + ".json";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1000);
+    toast("已导出备份");
+  });
+
+  let armed = false;
+  let armTimer;
+  const clearBtn = $("#clearBtn");
+  clearBtn.addEventListener("click", function(){
+    if (!armed){
+      armed = true;
+      clearBtn.textContent = "再点一次确认清空";
+      armTimer = setTimeout(function(){
+        armed = false;
+        clearBtn.textContent = "清空数据";
+      }, 4000);
+      return;
+    }
+    clearTimeout(armTimer);
+    armed = false;
+    data = { dumps:{}, nights:{}, lightsOut:null };
+    try { localStorage.removeItem(KEY); } catch(e){}
+    toast("已清空");
+    setTimeout(function(){ location.reload(); }, 500);
+  });
+})();
+</script>
+</body>
+</html>
